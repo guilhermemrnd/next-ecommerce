@@ -1,15 +1,25 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { ReactSortable } from "react-sortablejs";
 import axios from "axios";
 
 import { Product } from "@/pages/api/products";
+import { Category } from "@/pages/api/categories";
 import Spinner from "./Spinner";
-import { ReactSortable } from "react-sortablejs";
 
 export default function ProductForm(props: Partial<Product>) {
   const router = useRouter();
 
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  useEffect(() => {
+    axios.get("/api/categories").then((response) => {
+      setCategories(response.data);
+    });
+  }, []);
+
   const [title, setTitle] = useState(props.title ?? "");
+  const [category, setCategory] = useState(props.category ?? "");
   const [description, setDescription] = useState(props.description ?? "");
   const [price, setPrice] = useState(props.price ?? "");
   const [images, setImages] = useState(props.images ?? []);
@@ -18,7 +28,7 @@ export default function ProductForm(props: Partial<Product>) {
 
   async function createProduct(ev: FormEvent<HTMLFormElement>) {
     ev.preventDefault();
-    const data = { title, description, price, images };
+    const data = { title, category, description, price, images };
 
     if (props._id) {
       await axios.put(`/api/products`, { ...data, _id: props._id });
@@ -50,7 +60,7 @@ export default function ProductForm(props: Partial<Product>) {
   }
 
   return (
-    <form onSubmit={createProduct}>
+    <form className="w-1/2" onSubmit={createProduct}>
       <label className="text-blue-900">Product name</label>
       <input
         className="mb-2 w-full rounded-md border-2 border-gray-300 px-2 py-1 focus:border-blue-900"
@@ -60,20 +70,32 @@ export default function ProductForm(props: Partial<Product>) {
         onChange={(ev) => setTitle(ev.target.value)}
       />
 
+      <label className="text-blue-900">Category</label>
+      <select
+        className="mb-2 w-full rounded-md border-2 border-gray-300 px-2 py-1 focus:border-blue-900"
+        value={category}
+        onChange={(ev) => setCategory(ev.currentTarget.value)}
+      >
+        <option value="">Uncategorized</option>
+        {categories.length > 0 &&
+          categories.map((c) => <option value={c._id}>{c.name}</option>)}
+      </select>
+
       <label className="text-blue-900">Photos</label>
       <div className="mb-2 flex flex-wrap gap-2">
-        <ReactSortable
-          className="flex flex-wrap gap-2"
-          list={images as any}
-          setList={uploadImagesOrder}
-        >
-          {!!images?.length &&
-            images.map((link) => (
+        {!!images?.length && (
+          <ReactSortable
+            className="flex flex-wrap gap-2"
+            list={images as any}
+            setList={uploadImagesOrder}
+          >
+            {images.map((link) => (
               <div key={link} className="h-24 rounded-lg">
                 <img src={link} alt="" className="max-h-full" />
               </div>
             ))}
-        </ReactSortable>
+          </ReactSortable>
+        )}
 
         {isUploading && (
           <div className="flex h-24 w-20 items-center justify-center border bg-gray-100">

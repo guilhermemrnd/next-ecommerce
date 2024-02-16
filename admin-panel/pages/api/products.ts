@@ -6,6 +6,7 @@ import { mongooseConnect } from "@/lib/mongoose";
 export type Product = {
   _id: string;
   title: string;
+  category?: string;
   description?: string;
   price: number;
   images?: string[];
@@ -29,13 +30,23 @@ export default async function handle(
   }
 
   if (method === "PUT") {
-    const { _id, ...product } = req.body as Partial<Product>;
-    await Product.updateOne({ _id }, { ...product });
+    const { _id, category, ...product } = req.body as Partial<Product>;
+
+    if (category === "") {
+      await Product.updateOne(
+        { _id },
+        { ...product, $unset: { category: "" } }
+      );
+    } else {
+      await Product.updateOne({ _id }, { ...product, category });
+    }
+
     res.json({ message: "product updated successfully" });
   }
 
   if (method === "POST") {
     const { ...newProduct } = req.body as Omit<Product, "_id">;
+    if (newProduct.category === "") delete newProduct.category;
     const productDoc = await Product.create({ ...newProduct });
     res.json(productDoc);
   }

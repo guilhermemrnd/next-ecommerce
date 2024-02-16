@@ -21,13 +21,13 @@ export default function Products() {
           Add New Product
         </button>
       </Link>
-      <table className="mt-2 w-full">
+      <table className="mt-2 w-1/2">
         <thead>
           <tr className="">
             <td className="border border-blue-200 bg-blue-100 p-1">
               Product name
             </td>
-            <td className="border border-blue-200 bg-blue-100 p-1">Actions</td>
+            <td className="border border-blue-200 bg-blue-100 p-1"></td>
           </tr>
         </thead>
         <tbody>
