@@ -21,7 +21,7 @@ export default function Products() {
           Add New Product
         </button>
       </Link>
-      <table className="products-list mt-2 w-full">
+      <table className="mt-2 w-full">
         <thead>
           <tr className="">
             <td className="border border-blue-200 bg-blue-100 p-1">
