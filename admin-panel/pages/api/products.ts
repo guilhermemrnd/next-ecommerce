@@ -46,8 +46,10 @@ export default async function handle(
 
   if (method === "POST") {
     const { ...newProduct } = req.body as Omit<Product, "_id">;
-    if (newProduct.category === "") delete newProduct.category;
-    const productDoc = await Product.create({ ...newProduct });
+    const productDoc = await Product.create({
+      ...newProduct,
+      category: newProduct.category || undefined,
+    });
     res.json(productDoc);
   }
 

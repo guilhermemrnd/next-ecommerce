@@ -1,9 +1,9 @@
-import { ButtonHTMLAttributes, useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import { withSwal } from "react-sweetalert2";
+import axios from "axios";
 
 import Layout from "@/components/Layout";
-import { Category } from "./api/categories";
+import { Category, CategoryProp } from "./api/categories";
 
 export function Categories({ swal }) {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -18,13 +18,22 @@ export function Categories({ swal }) {
 
   const [name, setName] = useState("");
   const [parentCategory, setParentCategory] = useState("");
+  const [properties, setProperties] = useState<CategoryProp[]>([]);
+
   const [categoryBeingEdited, setCategoryBeingEdited] = useState<{
     _id: string;
   }>();
 
   async function saveCategory(ev: React.FormEvent<HTMLFormElement>) {
     ev.preventDefault();
-    const category = { name, parent: parentCategory };
+    const category = {
+      name,
+      parent: parentCategory,
+      properties: properties.map((p) => ({
+        name: p.name,
+        values: (p.values as string).split(","),
+      })),
+    };
 
     if (!categoryBeingEdited) {
       await axios.post("/api/categories", category);
@@ -36,6 +45,7 @@ export function Categories({ swal }) {
 
     setName("");
     setParentCategory("");
+    setProperties([]);
     fetchCategories();
   }
 
@@ -67,15 +77,16 @@ export function Categories({ swal }) {
           <label className="text-blue-900">
             {!categoryBeingEdited ? "New category name" : "Editing category"}
           </label>
-          <div className="flex gap-1">
+          <div className="mb-2 flex gap-1">
             <input
-              className="w-full rounded-md border-2 border-gray-300 px-2 py-1 focus:border-blue-900"
+              className="w-full rounded-md border-2 border-gray-300 px-2 py-1 outline-blue-900"
               placeholder="Category name"
               value={name}
               onChange={(ev) => setName(ev.target.value)}
             />
+
             <select
-              className="w-full rounded-md border-2 border-gray-300 px-2 py-1 focus:border-blue-900"
+              className="w-full rounded-md border-2 border-gray-300 px-2 py-1 outline-blue-900"
               value={parentCategory}
               onChange={(ev) => setParentCategory(ev.currentTarget.value)}
             >
@@ -87,9 +98,98 @@ export function Categories({ swal }) {
                   </option>
                 ))}
             </select>
+
             <button className="rounded-md bg-blue-900 px-4 py-1 text-white">
               Save
             </button>
+            {categoryBeingEdited && (
+              <button
+                className="rounded-md bg-gray-500 px-4 py-1 text-white"
+                type="button"
+                onClick={() => {
+                  setName("");
+                  setParentCategory("");
+                  setProperties([]);
+                  setCategoryBeingEdited(undefined);
+                }}
+              >
+                Cancel
+              </button>
+            )}
+          </div>
+
+          <div className="mb-2">
+            <label className="text-blue-900">Properties</label>
+            <button
+              type="button"
+              onClick={() => {
+                setProperties((prev) => {
+                  return [...prev, { name: "", values: "" }];
+                });
+              }}
+              className="ml-2 rounded-md text-[12px] leading-[16px] text-blue-500 underline"
+            >
+              Add new property
+            </button>
+
+            {properties.length > 0 &&
+              properties.map((prop, index) => (
+                <div className="mt-1 flex gap-1">
+                  <input
+                    className="w-full rounded-lg border border-gray-300 px-2 py-1 outline-blue-900 placeholder:text-sm"
+                    type="text"
+                    value={prop.name}
+                    onChange={(ev) => {
+                      setProperties((prev) => {
+                        const properties = [...prev];
+                        properties[index].name = ev.target.value;
+                        return properties;
+                      });
+                    }}
+                    placeholder="property name (i.e: color)"
+                  />
+                  <input
+                    className="w-full rounded-lg border border-gray-300 px-2 py-1 outline-blue-900 placeholder:text-sm"
+                    type="text"
+                    value={prop.values}
+                    onChange={(ev) => {
+                      setProperties((prev) => {
+                        const properties = [...prev];
+                        properties[index].values = ev.target.value;
+                        return properties;
+                      });
+                    }}
+                    placeholder="values, comma separated"
+                  />
+                  <button
+                    type="button"
+                    className="text-red-600"
+                    title="remove property"
+                    onClick={() => {
+                      setProperties((prev) => {
+                        return [...prev].filter((prop, pIndex) => {
+                          return pIndex !== index;
+                        });
+                      });
+                    }}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="h-6 w-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              ))}
           </div>
         </form>
 
@@ -120,6 +220,14 @@ export function Categories({ swal }) {
                       onClick={() => {
                         setName(category.name);
                         setParentCategory((category?.parent as Category)?._id);
+                        setProperties(
+                          category?.properties?.map((p) => {
+                            return {
+                              name: p.name,
+                              values: (p.values as string[]).join(","),
+                            };
+                          }) ?? []
+                        );
                         setCategoryBeingEdited({ _id: category._id });
                       }}
                       className="mr-1 inline-flex gap-1 rounded-md bg-blue-900 px-2 py-1 text-sm text-white"

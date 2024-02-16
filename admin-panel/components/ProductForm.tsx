@@ -63,7 +63,7 @@ export default function ProductForm(props: Partial<Product>) {
     <form className="w-1/2" onSubmit={createProduct}>
       <label className="text-blue-900">Product name</label>
       <input
-        className="mb-2 w-full rounded-md border-2 border-gray-300 px-2 py-1 focus:border-blue-900"
+        className="mb-2 w-full rounded-md border-2 border-gray-300 px-2 py-1 outline-blue-900"
         type="text"
         placeholder="product name"
         value={title}
@@ -72,7 +72,7 @@ export default function ProductForm(props: Partial<Product>) {
 
       <label className="text-blue-900">Category</label>
       <select
-        className="mb-2 w-full rounded-md border-2 border-gray-300 px-2 py-1 focus:border-blue-900"
+        className="mb-2 w-full rounded-md border-2 border-gray-300 px-2 py-1 outline-blue-900"
         value={category}
         onChange={(ev) => setCategory(ev.currentTarget.value)}
       >
@@ -126,7 +126,7 @@ export default function ProductForm(props: Partial<Product>) {
 
       <label className="text-blue-900">Description</label>
       <textarea
-        className="mb-2 w-full rounded-md border-2 border-gray-300 px-2 py-1 focus:border-blue-900"
+        className="mb-2 w-full rounded-md border-2 border-gray-300 px-2 py-1 outline-blue-900"
         placeholder="description"
         value={description}
         onChange={(ev) => setDescription(ev.target.value)}
@@ -134,7 +134,7 @@ export default function ProductForm(props: Partial<Product>) {
 
       <label className="text-blue-900">Price (in USD)</label>
       <input
-        className="mb-2 w-full rounded-md border-2 border-gray-300 px-2 py-1 focus:border-blue-900"
+        className="mb-2 w-full rounded-md border-2 border-gray-300 px-2 py-1 outline-blue-900"
         type="number"
         placeholder="price"
         value={price}

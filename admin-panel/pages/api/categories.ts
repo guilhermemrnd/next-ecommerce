@@ -3,10 +3,16 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { mongooseConnect } from "@/lib/mongoose";
 import { Category } from "@/models/Category";
 
+export type CategoryProp = {
+  name: string;
+  values: string | string[];
+};
+
 export type Category = {
   _id: string;
   name: string;
   parent?: string | Category;
+  properties?: CategoryProp[];
 };
 
 export default async function handle(
@@ -22,12 +28,15 @@ export default async function handle(
   }
 
   if (method === "PUT") {
-    const { _id, parent, name } = req.body as Category;
+    const { _id, parent, ...category } = req.body as Category;
 
     if (parent === "") {
-      await Category.updateOne({ _id }, { name, $unset: { parent: "" } });
+      await Category.updateOne(
+        { _id },
+        { ...category, $unset: { parent: "" } }
+      );
     } else {
-      await Category.updateOne({ _id }, { name, parent });
+      await Category.updateOne({ _id }, { ...category, parent });
     }
 
     res.json({ message: "category updated successfully" });
@@ -35,8 +44,10 @@ export default async function handle(
 
   if (method === "POST") {
     const { ...category } = req.body as Omit<Category, "_id">;
-    if (category.parent === "") delete category.parent;
-    const categoryDoc = await Category.create({ ...category });
+    const categoryDoc = await Category.create({
+      ...category,
+      parent: category.parent || undefined,
+    });
     res.json(categoryDoc);
   }
 
