@@ -4,7 +4,7 @@ import { ReactSortable } from "react-sortablejs";
 import axios from "axios";
 
 import { Product } from "@/pages/api/products";
-import { Category } from "@/pages/api/categories";
+import { Category, CategoryProp } from "@/pages/api/categories";
 import Spinner from "./Spinner";
 
 export default function ProductForm(props: Partial<Product>) {
@@ -20,6 +20,7 @@ export default function ProductForm(props: Partial<Product>) {
 
   const [title, setTitle] = useState(props.title ?? "");
   const [category, setCategory] = useState(props.category ?? "");
+  const [productProps, setProductProps] = useState<Record<string, string>>(props.properties ?? {});
   const [description, setDescription] = useState(props.description ?? "");
   const [price, setPrice] = useState(props.price ?? "");
   const [images, setImages] = useState(props.images ?? []);
@@ -28,7 +29,14 @@ export default function ProductForm(props: Partial<Product>) {
 
   async function createProduct(ev: FormEvent<HTMLFormElement>) {
     ev.preventDefault();
-    const data = { title, category, description, price, images };
+    const data = {
+      title,
+      category,
+      properties: productProps,
+      description,
+      price,
+      images,
+    };
 
     if (props._id) {
       await axios.put(`/api/products`, { ...data, _id: props._id });
@@ -59,6 +67,19 @@ export default function ProductForm(props: Partial<Product>) {
     setImages(args as string[]);
   }
 
+  const propertiesToFill = [] as CategoryProp[];
+  if (categories.length > 0 && category) {
+    let categoryInfo = categories.find(({ _id }) => _id === category);
+    propertiesToFill.push(...categoryInfo?.properties!);
+    while ((categoryInfo?.parent as Category)?._id) {
+      const parentInfo = categories.find(
+        ({ _id }) => _id === (categoryInfo?.parent as Category)._id
+      );
+      propertiesToFill.push(...parentInfo?.properties!);
+      categoryInfo = parentInfo;
+    }
+  }
+
   return (
     <form className="w-1/2" onSubmit={createProduct}>
       <label className="text-blue-900">Product name</label>
@@ -68,18 +89,48 @@ export default function ProductForm(props: Partial<Product>) {
         placeholder="product name"
         value={title}
         onChange={(ev) => setTitle(ev.target.value)}
+        autoFocus
       />
 
       <label className="text-blue-900">Category</label>
       <select
         className="mb-2 w-full rounded-md border-2 border-gray-300 px-2 py-1 outline-blue-900"
         value={category}
-        onChange={(ev) => setCategory(ev.currentTarget.value)}
+        onChange={(ev) => setCategory(ev.target.value)}
       >
         <option value="">Uncategorized</option>
         {categories.length > 0 &&
-          categories.map((c) => <option value={c._id}>{c.name}</option>)}
+          categories.map((c) => (
+            <option key={c._id} value={c._id}>
+              {c.name}
+            </option>
+          ))}
       </select>
+
+      {propertiesToFill.length > 0 && (
+        <div className="mb-3 grid grid-cols-3 gap-x-3 gap-y-2">
+          {propertiesToFill.map((p) => (
+            <div>
+              <label className="text-blue-900">
+                {p.name.charAt(0).toUpperCase() + p.name.slice(1)}
+              </label>
+              <select
+                className="w-full rounded-md border-2 border-gray-300 px-2 py-1 outline-blue-900"
+                value={productProps[p.name]}
+                onChange={(ev) => {
+                  setProductProps((prev) => {
+                    return { ...prev, [p.name]: ev.target.value };
+                  });
+                }}
+              >
+                {(p.values as string[]).map((v) => (
+                  <option value={v}>{v}</option>
+                ))}
+              </select>
+            </div>
+          ))}
+        </div>
+      )}
 
       <label className="text-blue-900">Photos</label>
       <div className="mb-2 flex flex-wrap gap-2">

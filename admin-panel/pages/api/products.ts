@@ -7,6 +7,7 @@ export type Product = {
   _id: string;
   title: string;
   category?: string;
+  properties?: Record<string, string>;
   description?: string;
   price: number;
   images?: string[];
