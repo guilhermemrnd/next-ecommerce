@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
+import { isAuthenticated } from "./auth/[...nextauth]";
 import { mongooseConnect } from "@/lib/mongoose";
 import { Category } from "@/models/Category";
 
@@ -21,6 +22,7 @@ export default async function handle(
 ) {
   const { method } = req;
   await mongooseConnect();
+  await isAuthenticated(req, res);
 
   if (method === "GET") {
     const categories = await Category.find().populate("parent");

@@ -4,6 +4,9 @@ import multiparty from "multiparty";
 import mime from "mime-types";
 import fs from "fs";
 
+import { isAuthenticated } from "./auth/[...nextauth]";
+import { mongooseConnect } from "@/lib/mongoose";
+
 const bucketName = "gm-next-ecommerce";
 
 type ParsedForm = { fields; files };
@@ -12,6 +15,9 @@ export default async function handle(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  await mongooseConnect();
+  await isAuthenticated(req, res);
+
   const form = new multiparty.Form();
 
   const { fields, files }: ParsedForm = await new Promise((resolve, reject) => {

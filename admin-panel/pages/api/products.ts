@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
+import { isAuthenticated } from "./auth/[...nextauth]";
 import { Product } from "@/models/Product";
 import { mongooseConnect } from "@/lib/mongoose";
 
@@ -19,6 +20,7 @@ export default async function handle(
 ) {
   const { method } = req;
   await mongooseConnect();
+  await isAuthenticated(req, res);
 
   if (method === "GET") {
     if (req.query?.id) {
