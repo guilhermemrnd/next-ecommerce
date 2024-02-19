@@ -27,18 +27,15 @@ export default function DeleteProductPage() {
 
   return (
     <Layout>
-      <h1 className="text-xl mb-2 font-bold text-blue-900 text-center">
-        Do you really want to delete "{productInfo?.title}"
+      <h1 className="mb-4 text-center text-xl font-medium text-gray-800 mt-5">
+        Do you really want to delete <br className="md:hidden" /> "{productInfo?.title}"?
       </h1>
-      <div className="flex gap-2 justify-center">
-        <button
-          className="bg-red-700 text-white px-3 py-1 rounded-md"
-          onClick={deleteProduct}
-        >
+      <div className="flex justify-center gap-2">
+        <button className="rounded-sm bg-red-700 px-5 py-1 text-white" onClick={deleteProduct}>
           Yes
         </button>
         <button
-          className="bg-gray-600 text-white px-3 py-1 rounded-md"
+          className="rounded-sm bg-gray-600 px-5 py-1 text-white"
           onClick={() => router.push("/products")}
         >
           No

@@ -71,22 +71,22 @@ export function Categories({ swal }) {
 
   return (
     <Layout>
-      <h1 className="mb-2 text-xl font-bold text-blue-900">Categories</h1>
-      <div className="w-1/2">
+      <h1 className="mb-4 text-xl font-bold text-gray-800">Categories</h1>
+      <div className="w-full lg:w-2/3">
         <form onSubmit={saveCategory}>
-          <label className="text-blue-900">
+          <label className="text-gray-600">
             {!categoryBeingEdited ? "New category name" : "Editing category"}
           </label>
           <div className="mb-2 flex gap-1">
             <input
-              className="w-full rounded-md border-2 border-gray-300 px-2 py-1 outline-blue-900"
+              className="w-full rounded-sm border border-gray-200 px-2 py-1 outline-blue-900"
               placeholder="Category name"
               value={name}
               onChange={(ev) => setName(ev.target.value)}
             />
 
             <select
-              className="w-full rounded-md border-2 border-gray-300 px-2 py-1 outline-blue-900"
+              className="w-full rounded-sm border border-gray-200 px-2 py-1 outline-blue-900"
               value={parentCategory}
               onChange={(ev) => setParentCategory(ev.target.value)}
             >
@@ -99,12 +99,10 @@ export function Categories({ swal }) {
                 ))}
             </select>
 
-            <button className="rounded-md bg-blue-900 px-4 py-1 text-white">
-              Save
-            </button>
+            <button className="rounded-sm bg-primary px-4 py-1 text-white">Save</button>
             {categoryBeingEdited && (
               <button
-                className="rounded-md bg-gray-500 px-4 py-1 text-white"
+                className="rounded-sm bg-gray-500 px-4 py-1 text-white"
                 type="button"
                 onClick={() => {
                   setName("");
@@ -119,7 +117,7 @@ export function Categories({ swal }) {
           </div>
 
           <div className="mb-2">
-            <label className="text-blue-900">Properties</label>
+            <label className="text-gray-600">Properties</label>
             <button
               type="button"
               onClick={() => {
@@ -127,7 +125,7 @@ export function Categories({ swal }) {
                   return [...prev, { name: "", values: "" }];
                 });
               }}
-              className="ml-2 rounded-md text-[12px] leading-[16px] text-blue-500 underline"
+              className="ml-2 rounded-sm text-[12px] leading-[16px] text-blue-500 underline"
             >
               Add new property
             </button>
@@ -136,7 +134,7 @@ export function Categories({ swal }) {
               properties.map((prop, index) => (
                 <div className="mt-1 flex gap-1">
                   <input
-                    className="w-full rounded-lg border border-gray-300 px-2 py-1 outline-blue-900 placeholder:text-sm"
+                    className="w-full rounded-sm border border-gray-200 px-2 py-1 outline-blue-900 placeholder:text-sm"
                     type="text"
                     value={prop.name}
                     onChange={(ev) => {
@@ -149,7 +147,7 @@ export function Categories({ swal }) {
                     placeholder="property name (i.e: color)"
                   />
                   <input
-                    className="w-full rounded-lg border border-gray-300 px-2 py-1 outline-blue-900 placeholder:text-sm"
+                    className="w-full rounded-sm border border-gray-200 px-2 py-1 outline-blue-900 placeholder:text-sm"
                     type="text"
                     value={prop.values}
                     onChange={(ev) => {
@@ -163,7 +161,7 @@ export function Categories({ swal }) {
                   />
                   <button
                     type="button"
-                    className="text-red-600"
+                    className="text-red-500"
                     title="remove property"
                     onClick={() => {
                       setProperties((prev) => {
@@ -194,29 +192,25 @@ export function Categories({ swal }) {
         </form>
 
         {categories.length > 0 && (
-          <table className="mt-4 w-full">
+          <table className="mt-4 w-full bg-white shadow-md">
             <thead>
               <tr>
-                <td className="border border-blue-200 bg-blue-100 p-1">
+                <td className="border-b border-gray-200 px-4 py-1 text-sm font-medium uppercase text-gray-600">
                   Category name
                 </td>
-                <td className="border border-blue-200 bg-blue-100 p-1">
+                <td className="border-b border-gray-200 px-4 py-1 text-sm font-medium uppercase text-gray-600">
                   Parent category
                 </td>
-                <td className="border border-blue-200 bg-blue-100 p-1"></td>
+                <td className="border-b border-gray-200 px-4 py-1 text-sm font-medium uppercase text-gray-600"></td>
               </tr>
             </thead>
             <tbody>
               {categories.length > 0 &&
                 categories.map((category) => (
                   <tr key={category._id}>
-                    <td className="border border-blue-200 p-1">
-                      {category.name}
-                    </td>
-                    <td className="border border-blue-200 p-1">
-                      {(category?.parent as Category)?.name}
-                    </td>
-                    <td className="flex justify-center border border-blue-200 p-1">
+                    <td className="px-4 py-1">{category.name}</td>
+                    <td className="px-4 py-1">{(category?.parent as Category)?.name}</td>
+                    <td className="flex justify-center px-4 py-1">
                       <button
                         onClick={() => {
                           setName(category.name);
@@ -231,7 +225,7 @@ export function Categories({ swal }) {
                           );
                           setCategoryBeingEdited({ _id: category._id });
                         }}
-                        className="mr-1 inline-flex gap-1 rounded-md bg-blue-900 px-2 py-1 text-sm text-white"
+                        className="mr-1 inline-flex items-center gap-1 rounded-sm px-2 py-1 text-sm text-primary"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -247,11 +241,11 @@ export function Categories({ swal }) {
                             d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
                           />
                         </svg>
-                        Edit
+                        <span className="hidden md:block">Edit</span>
                       </button>
                       <button
                         onClick={() => deleteCategory(category)}
-                        className="mr-1 inline-flex gap-1 rounded-md bg-blue-900 px-2 py-1 text-sm text-white"
+                        className="mr-1 inline-flex items-center gap-1 rounded-sm px-2 py-1 text-sm text-red-500"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -267,7 +261,7 @@ export function Categories({ swal }) {
                             d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
                           />
                         </svg>
-                        Delete
+                        <span className="hidden md:block">Delete</span>
                       </button>
                     </td>
                   </tr>

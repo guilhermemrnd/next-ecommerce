@@ -81,10 +81,10 @@ export default function ProductForm(props: Partial<Product>) {
   }
 
   return (
-    <form className="w-1/2" onSubmit={createProduct}>
-      <label className="text-blue-900">Product name</label>
+    <form className="w-full md:w-1/2" onSubmit={createProduct}>
+      <label className="text-sm text-gray-600">Product name</label>
       <input
-        className="mb-2 w-full rounded-md border-2 border-gray-300 px-2 py-1 outline-blue-900"
+        className="mb-2 w-full rounded-sm border border-gray-200 px-2 py-1 outline-blue-900"
         type="text"
         placeholder="product name"
         value={title}
@@ -92,9 +92,9 @@ export default function ProductForm(props: Partial<Product>) {
         autoFocus
       />
 
-      <label className="text-blue-900">Category</label>
+      <label className="text-sm text-gray-600">Category</label>
       <select
-        className="mb-2 w-full rounded-md border-2 border-gray-300 px-2 py-1 outline-blue-900"
+        className="mb-2 w-full rounded-sm border border-gray-200 px-2 py-1 outline-blue-900"
         value={category}
         onChange={(ev) => setCategory(ev.target.value)}
       >
@@ -111,11 +111,11 @@ export default function ProductForm(props: Partial<Product>) {
         <div className="mb-3 grid grid-cols-3 gap-x-3 gap-y-2">
           {propertiesToFill.map((p) => (
             <div>
-              <label className="text-blue-900">
+              <label className="text-sm text-gray-600">
                 {p.name.charAt(0).toUpperCase() + p.name.slice(1)}
               </label>
               <select
-                className="w-full rounded-md border-2 border-gray-300 px-2 py-1 outline-blue-900"
+                className="w-full rounded-sm border border-gray-200 px-2 py-1 outline-blue-900"
                 value={productProps[p.name]}
                 onChange={(ev) => {
                   setProductProps((prev) => {
@@ -132,7 +132,7 @@ export default function ProductForm(props: Partial<Product>) {
         </div>
       )}
 
-      <label className="text-blue-900">Photos</label>
+      <label className="text-sm text-gray-600">Photos</label>
       <div className="mb-2 flex flex-wrap gap-2">
         {!!images?.length && (
           <ReactSortable
@@ -141,8 +141,8 @@ export default function ProductForm(props: Partial<Product>) {
             setList={uploadImagesOrder}
           >
             {images.map((link) => (
-              <div key={link} className="h-24 rounded-lg">
-                <img src={link} alt="" className="max-h-full" />
+              <div key={link} className="h-24 rounded-lg bg-white p-[12px] shadow-sm">
+                <img src={link} alt="" className="max-h-full rounded-lg" />
               </div>
             ))}
           </ReactSortable>
@@ -154,7 +154,7 @@ export default function ProductForm(props: Partial<Product>) {
           </div>
         )}
 
-        <label className="flex h-24 w-24 cursor-pointer flex-col items-center justify-center gap-1 rounded-lg bg-gray-100 text-sm text-gray-500">
+        <label className="flex h-24 w-24 cursor-pointer flex-col items-center justify-center gap-1 rounded-lg border border-primary bg-white text-sm text-primary shadow-sm">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -175,27 +175,24 @@ export default function ProductForm(props: Partial<Product>) {
         {!props?.images?.length && <div>No photos in this product</div>}
       </div>
 
-      <label className="text-blue-900">Description</label>
+      <label className="text-sm text-gray-600">Description</label>
       <textarea
-        className="mb-2 w-full rounded-md border-2 border-gray-300 px-2 py-1 outline-blue-900"
+        className="mb-2 w-full rounded-sm border border-gray-200 px-2 py-1 outline-blue-900"
         placeholder="description"
         value={description}
         onChange={(ev) => setDescription(ev.target.value)}
       ></textarea>
 
-      <label className="text-blue-900">Price (in USD)</label>
+      <label className="text-sm text-gray-600">Price (in USD)</label>
       <input
-        className="mb-2 w-full rounded-md border-2 border-gray-300 px-2 py-1 outline-blue-900"
+        className="mb-2 w-full rounded-sm border border-gray-200 px-2 py-1 outline-blue-900"
         type="number"
         placeholder="price"
         value={price}
         onChange={(ev) => setPrice(parseFloat(ev.target.value))}
       />
 
-      <button
-        type="submit"
-        className="mt-2 rounded-md bg-blue-900 px-4 py-1 text-white"
-      >
+      <button type="submit" className="mt-2 rounded-sm bg-primary px-4 py-1 text-white">
         Save
       </button>
     </form>

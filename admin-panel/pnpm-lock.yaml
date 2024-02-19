@@ -17,6 +17,9 @@ dependencies:
   fdbg:
     specifier: ^1.0.0
     version: 1.0.0
+  merge-class-names:
+    specifier: ^1.4.2
+    version: 1.4.2
   mime-types:
     specifier: ^2.1.35
     version: 2.1.35
@@ -1925,6 +1928,10 @@ packages:
 
   /memory-pager@1.5.0:
     resolution: {integrity: sha512-ZS4Bp4r/Zoeq6+NLJpP+0Zzm0pR8whtGPf1XExKLJBAczGMnSi3It14OiNCStjQjM6NU1okjQGSxgEZN8eBYKg==}
+    dev: false
+
+  /merge-class-names@1.4.2:
+    resolution: {integrity: sha512-bOl98VzwCGi25Gcn3xKxnR5p/WrhWFQB59MS/aGENcmUc6iSm96yrFDF0XSNurX9qN4LbJm0R9kfvsQ17i8zCw==}
     dev: false
 
   /merge2@1.4.1:
