@@ -4,7 +4,6 @@ import { IProduct, Product } from "@/models/Product";
 import Header from "@/componets/Header";
 import Featured from "@/componets/Featured";
 import NewProducts from "@/componets/NewProducts";
-import { CartContextProvider } from "@/contexts/CartContext";
 
 type HomeProps = {
   featuredProduct: IProduct;
@@ -14,11 +13,9 @@ type HomeProps = {
 export default function Home({ featuredProduct, newProducts }: HomeProps) {
   return (
     <>
-      <CartContextProvider>
-        <Header />
-        <Featured product={featuredProduct} />
-        <NewProducts products={newProducts} />
-      </CartContextProvider>
+      <Header />
+      <Featured product={featuredProduct} />
+      <NewProducts products={newProducts} />
     </>
   );
 }

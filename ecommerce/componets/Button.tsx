@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ButtonHTMLAttributes } from "react";
 import styled, { css } from "styled-components";
 import { primary } from "@/lib/colors";
 
@@ -18,6 +18,13 @@ export const ButtonStyle = css<Omit<ButtonProps, "children">>`
   svg {
     height: 16px;
   }
+
+  ${(props) =>
+    props?.block &&
+    css`
+      display: block;
+      width: 100%;
+    `}
 
   ${(props) =>
     props?.outline &&
@@ -61,18 +68,13 @@ const StyledButton = styled.button<Omit<ButtonProps, "children">>`
   ${ButtonStyle}
 `;
 
-export type ButtonProps = {
-  onClick?: () => void;
-  children: ReactNode;
+export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   primary?: boolean;
   outline?: boolean;
+  block?: boolean;
   size?: "sm" | "lg";
 };
 
-export default function Button({ onClick, children, ...attrs }: ButtonProps) {
-  return (
-    <StyledButton {...attrs} onClick={onClick}>
-      {children}
-    </StyledButton>
-  );
+export default function Button({ children, ...attrs }: ButtonProps) {
+  return <StyledButton {...attrs}>{children}</StyledButton>;
 }
