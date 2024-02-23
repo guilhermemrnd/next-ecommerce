@@ -1,9 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import styled from "styled-components";
 import axios from "axios";
 
-import { IProduct } from "@/models/Product";
 import { useCart } from "@/contexts/CartContext";
+import { IProduct } from "@/models/Product";
+import { CheckoutBodyDto } from "./api/checkout";
 
 import Header from "@/componets/Header";
 import Center from "@/componets/Center";
@@ -70,6 +72,7 @@ const CityHolder = styled.div`
 
 export default function Cart() {
   const { cartProducts, addProduct, removeProduct } = useCart();
+  const router = useRouter();
 
   const [products, setProducts] = useState<IProduct[]>([]);
 
@@ -93,6 +96,32 @@ export default function Cart() {
   let totalPrice = 0;
   for (const productId of cartProducts) {
     totalPrice += products?.find((p) => p._id === productId)?.price || 0;
+  }
+
+  const goToPayment = async () => {
+    const formData: CheckoutBodyDto = {
+      productsIds: cartProducts, name, email,
+      city, postalCode, address, country
+    } // prettier-ignore
+
+    const response = await axios.post("/api/checkout", { ...formData });
+    if (response.data.url) window.location = response.data.url;
+  };
+
+  if (router.asPath.includes("success")) {
+    return (
+      <>
+        <Header />
+        <Center>
+          <ColumnsWrapper>
+            <Box>
+              <h1>Thanks for your order!</h1>
+              <p>We will e-mail you when your order will be sent.</p>
+            </Box>
+          </ColumnsWrapper>
+        </Center>
+      </>
+    );
   }
 
   return (
@@ -149,56 +178,54 @@ export default function Cart() {
           {!!cartProducts.length && (
             <Box>
               <h2>Order information</h2>
-              <form method="post" action="/api/checkout">
+              <StyledInput
+                type="text"
+                placeholder="Name"
+                value={name}
+                name="name"
+                onChange={(ev) => setName(ev.target.value)}
+              />
+              <StyledInput
+                type="text"
+                placeholder="E-mail"
+                value={email}
+                name="email"
+                onChange={(ev) => setEmail(ev.target.value)}
+              />
+              <CityHolder>
                 <StyledInput
                   type="text"
-                  placeholder="Name"
-                  value={name}
-                  name="name"
-                  onChange={(ev) => setName(ev.target.value)}
+                  placeholder="City"
+                  value={city}
+                  name="city"
+                  onChange={(ev) => setCity(ev.target.value)}
                 />
                 <StyledInput
                   type="text"
-                  placeholder="E-mail"
-                  value={email}
-                  name="email"
-                  onChange={(ev) => setEmail(ev.target.value)}
+                  placeholder="Postal Code"
+                  value={postalCode}
+                  name="postalCode"
+                  onChange={(ev) => setPostalCode(ev.target.value)}
                 />
-                <CityHolder>
-                  <StyledInput
-                    type="text"
-                    placeholder="City"
-                    value={city}
-                    name="city"
-                    onChange={(ev) => setCity(ev.target.value)}
-                  />
-                  <StyledInput
-                    type="text"
-                    placeholder="Postal Code"
-                    value={postalCode}
-                    name="postalCode"
-                    onChange={(ev) => setPostalCode(ev.target.value)}
-                  />
-                </CityHolder>
-                <StyledInput
-                  type="text"
-                  placeholder="Street Address"
-                  value={address}
-                  name="address"
-                  onChange={(ev) => setAddress(ev.target.value)}
-                />
-                <StyledInput
-                  type="text"
-                  placeholder="Country"
-                  value={country}
-                  name="country"
-                  onChange={(ev) => setCountry(ev.target.value)}
-                />
-                <input type="hidden" value={cartProducts.join(",")} name="product" />
-                <Button primary block type="submit">
-                  Continue to payment
-                </Button>
-              </form>
+              </CityHolder>
+              <StyledInput
+                type="text"
+                placeholder="Street Address"
+                value={address}
+                name="address"
+                onChange={(ev) => setAddress(ev.target.value)}
+              />
+              <StyledInput
+                type="text"
+                placeholder="Country"
+                value={country}
+                name="country"
+                onChange={(ev) => setCountry(ev.target.value)}
+              />
+              <input type="hidden" value={cartProducts.join(",")} name="product" />
+              <Button primary block onClick={goToPayment}>
+                Continue to payment
+              </Button>
             </Box>
           )}
         </ColumnsWrapper>

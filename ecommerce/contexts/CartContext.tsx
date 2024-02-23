@@ -32,7 +32,8 @@ export function CartContextProvider({ children }) {
   useEffect(() => {
     if (typeof window !== "undefined" && window.localStorage) {
       const lsData = window.localStorage.getItem("cart");
-      setCartProducts(JSON.parse(lsData ?? ""));
+      if (lsData) setCartProducts(JSON.parse(lsData));
+      else setCartProducts([]);
     }
   }, []);
 
@@ -43,7 +44,7 @@ export function CartContextProvider({ children }) {
     setCartProducts((prev) => {
       const productIdx = prev.indexOf(productId);
       if (productIdx !== -1) {
-        return prev.filter((id, idx) => idx !== productIdx)
+        return prev.filter((id, idx) => idx !== productIdx);
       }
       return prev;
     });
