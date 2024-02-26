@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.page-title {
+  @apply mb-4 text-xl font-bold text-gray-800;
+}
