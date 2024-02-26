@@ -21,6 +21,8 @@ const OrderSchema = new Schema<IOrder>({
   address: String,
   country: String,
   paid: Boolean,
+}, {
+  timestamps: true
 });
 
 export const Order = models?.Order || model<IOrder>("Order", OrderSchema);

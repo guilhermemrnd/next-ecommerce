@@ -71,17 +71,9 @@ const CityHolder = styled.div`
 `;
 
 export default function Cart() {
-  const { cartProducts, addProduct, removeProduct } = useCart();
-  const router = useRouter();
+  const { cartProducts, addProduct, removeProduct, clearCart } = useCart();
 
   const [products, setProducts] = useState<IProduct[]>([]);
-
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [city, setCity] = useState("");
-  const [postalCode, setPostalCode] = useState("");
-  const [address, setAddress] = useState("");
-  const [country, setCountry] = useState("");
 
   useEffect(() => {
     if (cartProducts?.length > 0) {
@@ -93,10 +85,16 @@ export default function Cart() {
     }
   }, [cartProducts]);
 
-  let totalPrice = 0;
-  for (const productId of cartProducts) {
-    totalPrice += products?.find((p) => p._id === productId)?.price || 0;
-  }
+  const totalPrice = cartProducts.reduce((acc, productId) => {
+    return acc + (products?.find((p) => p._id === productId)?.price || 0);
+  }, 0);
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [city, setCity] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [address, setAddress] = useState("");
+  const [country, setCountry] = useState("");
 
   const goToPayment = async () => {
     const formData: CheckoutBodyDto = {
@@ -108,7 +106,16 @@ export default function Cart() {
     if (response.data.url) window.location = response.data.url;
   };
 
-  if (router.asPath.includes("success")) {
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.href.includes("success")) {
+      setIsSuccess(true);
+      clearCart();
+    }
+  }, []);
+
+  if (isSuccess) {
     return (
       <>
         <Header />

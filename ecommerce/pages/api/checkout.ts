@@ -34,9 +34,6 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
     const productInfo = productsInfos.find((p) => p._id.toString() === productId);
     const quantity = productsIds.filter((id) => id.toString() === productId).length || 0;
 
-    console.log('productInfo', productInfo)
-    console.log('quantity', quantity)
-
     if (quantity && productInfo) {
       line_items.push({
         quantity,
@@ -53,8 +50,6 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
     line_items, name, email, city,
     postalCode, address, country, paid: false,
   }); // prettier-ignore
-
-  dbg(line_items, "line_items");
 
   const session = await stripe.checkout.sessions.create({
     line_items,

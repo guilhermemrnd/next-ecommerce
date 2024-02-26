@@ -6,6 +6,7 @@ export type CartContextValue = {
   setCartProducts: Dispatch<SetStateAction<Types.ObjectId[]>>;
   addProduct: (productId: Types.ObjectId) => void;
   removeProduct: (productId: Types.ObjectId) => void;
+  clearCart: () => void;
 };
 
 export const CartContext = createContext<CartContextValue | null>(null);
@@ -49,9 +50,15 @@ export function CartContextProvider({ children }) {
       return prev;
     });
   };
+  const clearCart = () => {
+    setCartProducts([]);
+    window.localStorage.removeItem("cart");
+  };
 
   return (
-    <CartContext.Provider value={{ cartProducts, setCartProducts, addProduct, removeProduct }}>
+    <CartContext.Provider
+      value={{ cartProducts, setCartProducts, addProduct, removeProduct, clearCart }}
+    >
       {children}
     </CartContext.Provider>
   );
