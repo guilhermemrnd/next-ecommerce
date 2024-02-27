@@ -47,7 +47,7 @@ export default function ProductCard({ _id, title, images, price }: IProduct) {
   const { addProduct } = useCart();
 
   return (
-    <ProductWrapper>
+    <ProductWrapper key={_id.toString()}>
       <ImageWrapper href={`/product/${_id}`}>
         <img src={images[0]} alt="" />
       </ImageWrapper>
