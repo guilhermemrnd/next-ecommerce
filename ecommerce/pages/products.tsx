@@ -5,11 +5,9 @@ import { IProduct, Product } from "@/models/Product";
 
 import Header from "@/componets/Header";
 import Center from "@/componets/Center";
+import Title from "../componets/Title";
 import ProductCard from "@/componets/ProductCard";
 
-const Title = styled.h1`
-  font-size: 1.5em;
-`;
 const ProductsGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
