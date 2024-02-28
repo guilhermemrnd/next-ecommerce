@@ -13,9 +13,13 @@ import Button from "@/componets/Button";
 
 const ColumnsWrapper = styled.div`
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
+  grid-template-columns: 1fr;
   margin: 40px 0;
   gap: 40px;
+
+  @media screen and (min-width: 768px) {
+    grid-template-columns: 1.2fr 0.8fr;
+  }
 `;
 const Box = styled.div`
   background-color: white;
@@ -32,6 +36,7 @@ const StyledTable = styled.table`
     text-transform: uppercase;
     font-size: 0.8rem;
     font-weight: 600;
+    padding: 10px 8px;
   }
 
   td {
@@ -48,14 +53,30 @@ const ImageThumb = styled.div`
   align-items: center;
   justify-content: center;
   border-radius: 10px;
+  margin-bottom: 5px;
 
   img {
-    width: calc(100% - 10px);
-    height: calc(100% - 10px);
+    max-width: calc(100% - 10px);
+    max-height: calc(100% - 10px);
+  }
+`;
+const QuantityWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media screen and (min-width: 768px) {
+    display: block;
   }
 `;
 const QuantityLabel = styled.span`
-  padding: 0 0px;
+  padding: 5px 0;
+  display: block;
+
+  @media screen and (min-width: 768px) {
+    padding: 0 5px;
+    display: inline-block;
+  }
 `;
 const StyledInput = styled.input`
   width: 100%;
@@ -164,9 +185,15 @@ export default function Cart() {
                           {product.title}
                         </td>
                         <td>
-                          <Button onClick={() => removeProduct(product._id)}>-</Button>
-                          <QuantityLabel>{quantity}</QuantityLabel>
-                          <Button onClick={() => addProduct(product._id)}>+</Button>
+                          <QuantityWrapper>
+                            <Button onClick={() => removeProduct(product._id)} bgColor="#f0f0f0">
+                              -
+                            </Button>
+                            <QuantityLabel>{quantity}</QuantityLabel>
+                            <Button onClick={() => addProduct(product._id)} bgColor="#f0f0f0">
+                              +
+                            </Button>
+                          </QuantityWrapper>
                         </td>
                         <td>${product.price * quantity}</td>
                       </tr>

@@ -33,10 +33,18 @@ const InfoWrapper = styled.div`
   margin-top: 10px;
 `;
 const PriceRow = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: block;
   margin-top: 5px;
+
+  @media screen and (min-width: 768px) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    button {
+      width: auto;
+    }
+  }
 `;
 const Price = styled.div`
   font-size: 1.2rem;
@@ -55,7 +63,7 @@ export default function ProductCard({ _id, title, images, price }: IProduct) {
         <Title href={`/product/${_id}`}>{title}</Title>
         <PriceRow>
           <Price>${price}</Price>
-          <Button primary outline onClick={() => addProduct(_id)}>
+          <Button onClick={() => addProduct(_id)} primary outline block>
             Add to cart
           </Button>
         </PriceRow>

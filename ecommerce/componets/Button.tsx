@@ -8,12 +8,12 @@ export const ButtonStyle = css<Omit<ButtonProps, "children">>`
   border-radius: 6px;
   cursor: pointer;
   box-sizing: border-box;
-  background-color: white;
+  background-color: ${(props) => props?.bgColor || "white"};
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: #000;
+  color: ${(props) => props?.color || "#000"};
 
   svg {
     height: 16px;
@@ -72,6 +72,8 @@ export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   primary?: boolean;
   outline?: boolean;
   block?: boolean;
+  bgColor?: string;
+  color?: string;
   size?: "sm" | "lg";
 };
 

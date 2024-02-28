@@ -11,15 +11,37 @@ import CartIcon from "./icons/CartIcon";
 const Bg = styled.div`
   background-color: #222;
   color: white;
+  padding: 20px 0 48px;
+
+  @media screen and (min-width: 768px) {
   padding: 48px 0;
+  }
 `;
 const ColumnsWrapper = styled.div`
   display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
+  grid-template-columns: 1fr;
   gap: 60px;
+  div:nth-child(1) {
+    order: 2;
+  }
 
   img {
     max-width: 100%;
+    max-height: 200px;
+    display: block;
+    margin: 0 auto;
+  }
+
+  @media screen and (min-width: 768px) {
+    grid-template-columns: 1.1fr 0.9fr;
+
+    div:nth-child(1) {
+      order: 0;
+    }
+
+    img {
+      max-width: 100%;
+    }
   }
 `;
 const Column = styled.div`
@@ -29,7 +51,11 @@ const Column = styled.div`
 const Title = styled.h1`
   margin: 0;
   font-weight: normal;
-  font-size: 3rem;
+  font-size: 1.8rem;
+
+  @media screen and (min-width: 768px) {
+    font-size: 3rem;
+  }
 `;
 const Description = styled.p`
   font-size: 0.8rem;
@@ -57,7 +83,7 @@ export default function Featured({ product }: { product: IProduct }) {
                 Mauris nec condimentum odio. Phasellus a porta neque, eget congue velit.
               </Description>
               <ButtonsWrapper>
-                <ButtonLink outline url={`/products/${product._id}`}>
+                <ButtonLink outline url={`/product/${product._id}`}>
                   Read more
                 </ButtonLink>
                 <Button onClick={() => addProduct(product._id)}>

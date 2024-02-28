@@ -12,9 +12,13 @@ import { useCart } from "@/contexts/CartContext";
 
 const ColsWrapper = styled.div`
   display: grid;
-  grid-template-columns: 0.8fr 1.2fr;
+  grid-template-columns: 1fr;
   gap: 40px;
-  margin-top: 40px;
+  margin: 40px 0;
+
+  @media screen and (min-width: 768px) {
+    grid-template-columns: 0.8fr 1.2fr;
+  }
 `;
 const WhiteBox = styled.div`
   background-color: white;
